@@ -1,0 +1,79 @@
+"@startuml Notifications architecture"
+skinparam componentStyle uml1
+
+package Authorization {
+    component Auth
+    database Redis as redis2
+    database Postgres as postgres2
+}
+
+package AdminPanel {
+    component DjangoWebBackend as django
+    database Postgres as postgres1
+}
+
+package PeriodicEvent {
+    component Scheduler
+}
+
+package EventBus {
+    component Kafka
+}
+
+package Notifications {
+    component Worker as worker1
+}
+
+package MessageBroker {
+    component RabbitMQ as rabbit {
+        component queue1 as queue1
+        component queue2 as queue2
+        queue1 -[hidden]-> queue2
+    }
+}
+
+package Email {
+    component Worker as worker2
+}
+
+package SMS {
+    component Worker as worker3
+}
+
+package MovieSearch {
+    component FastapiWebBackend as fastapi
+    database Redis as redis1
+}
+
+package UGC {
+    component BigDataBackend as bigdata
+    database MongoDB as mongo
+}
+
+
+AdminPanel -[hidden]-> Authorization
+Authorization -[hidden]-> PeriodicEvent
+Notifications -[hidden]-> MessageBroker
+Notifications -[hidden]-> EventBus
+MovieSearch -[hidden]-> Notifications
+Notifications -[hidden]-> UGC
+
+django -l-> postgres1
+django -> Kafka: Сообщения от\nменеджеров
+fastapi -r-> redis1
+Auth -l-> postgres2
+Auth -d-> redis2
+Auth -r-> Kafka: Регистрация пользователя
+Scheduler -r-> Kafka: Еженедельное напоминание\nежемесячная статистика
+Kafka -l-> worker1
+worker1 -l-> queue1
+worker1 -l-> queue2
+queue1 -l-> worker2
+queue2 -l-> worker2
+queue2 -l-> worker3
+worker1 -> Auth: Запрос данных о пользователе\n(имя, email)
+worker1 -> fastapi: Запрос данных\nо фильме
+bigdata -l-> mongo
+worker1 -> bigdata: Запрос данных о\nпросмотренных\nфильмах
+
+@enduml 
