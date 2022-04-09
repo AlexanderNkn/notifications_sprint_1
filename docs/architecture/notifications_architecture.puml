@@ -22,6 +22,7 @@ package EventBus {
 
 package Notifications {
     component Worker as worker1
+    database Redis as redis3
 }
 
 package MessageBroker {
@@ -75,5 +76,6 @@ worker1 -> Auth: Запрос данных о пользователе\n(имя,
 worker1 -> fastapi: Запрос данных\nо фильме
 bigdata -l-> mongo
 worker1 -> bigdata: Запрос данных о\nпросмотренных\nфильмах
+worker1 -> redis3
 
 @enduml 
