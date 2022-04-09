@@ -30,9 +30,17 @@ jobs:
 
       - name: Send telegram message on push
         uses: appleboy/telegram-action@master
+        env:
+          COMMIT_RESULT: ${{ github.event.workflow_run.conclusion }}
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
+          run: |
+            if ${COMMIT_RESULT} == 'success'; then
+              echo 'COMMIT_RESULT=successfully' >> $GITHUB_ENV
+            else
+              echo 'COMMIT_RESULT=with error' >> $GITHUB_ENV
+            fi
           message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
+            ${{ github.actor }} created commit ${{ github.head_commit.message }}
+            ${{ github.repository }}: Pipeline for ${{ github.head_commit.id }} finished ${{ env.COMMIT_RESULT }}!
