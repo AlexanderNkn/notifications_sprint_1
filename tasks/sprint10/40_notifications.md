@@ -25,6 +25,8 @@
 - 41_greeting.md
 - 42_reminder.md
 - 43_view_statistic.md
+- 46_mock_services.md
+- 47_timezones.md
 *дополнительно
 получение короткой ссылки для подтверждения регистрации
 - 44_confirm_email.md
