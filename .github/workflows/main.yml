@@ -1,0 +1,46 @@
+name: notifications workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test_with_linters:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '3.8', '3.9' ]
+    name: Python ${{ matrix.python-version }} version
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mypy
+
+      - name: Lint with wemake-python-styleguide for python ${{ matrix.python-version }} version
+        uses: wemake-services/wemake-python-styleguide@0.16.1
+
+      - name: Send telegram message on push
+        uses: appleboy/telegram-action@master
+        env:
+          COMMIT_RESULT: ${{ github.event.workflow_run.conclusion }}
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          run: |
+            if ${COMMIT_RESULT} == 'success'; then
+              echo 'COMMIT_RESULT=successfully' >> $GITHUB_ENV
+            else
+              echo 'COMMIT_RESULT=with error' >> $GITHUB_ENV
+            fi
+          message: |
+            ${{ github.actor }} created commit ${{ github.head_commit.message }}
+            ${{ github.repository }}: Pipeline for ${{ github.head_commit.id }} finished ${{ env.COMMIT_RESULT }}!
