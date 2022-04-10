@@ -28,6 +28,9 @@ jobs:
       - name: Lint with wemake-python-styleguide for python ${{ matrix.python-version }} version
         uses: wemake-services/wemake-python-styleguide@0.16.1
 
+      - name: Lint with mypy for python ${{ matrix.python-version }} version
+        run: mypy -m notifications
+
   notification:
     runs-on: ubuntu-latest
     needs: test_with_linters
