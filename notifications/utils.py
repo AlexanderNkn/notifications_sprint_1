@@ -2,12 +2,12 @@
 
 
 def get_data_for_greeting_letter(**kwargs) -> dict:
-    pass
+    return kwargs
 
 
 def get_data_for_weekly_reminder(**kwargs) -> dict:
-    pass
+    return kwargs
 
 
 def get_data_for_monthly_statistics(**kwargs) -> dict:
-    pass
+    return kwargs

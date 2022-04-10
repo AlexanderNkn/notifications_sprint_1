@@ -66,10 +66,7 @@ services:
       /etc/schema-registry/secrets
 
   connect:
-    image: mongo-cp-server-connect-datagen:0.5.0-6.2.0
-    build:
-      context: .
-      dockerfile: kafka_mongo_etl/docker/Dockerfile-MongoConnect
+    image: cnfldemos/cp-server-connect-datagen:0.5.0-6.2.0
     hostname: connect
     container_name: connect
     depends_on:
@@ -200,10 +197,20 @@ services:
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
-
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - rabbitmq_data:/var/lib/rabbitmq/
+        - rabbitmq_log:/var/log/rabbitmq
 
 volumes:
   zookeeper_kafka_data:
   zookeeper_kafka_log:
   broker_kafka_data:
   kafka_data:
+  rabbitmq_data:
+  rabbitmq_log:
