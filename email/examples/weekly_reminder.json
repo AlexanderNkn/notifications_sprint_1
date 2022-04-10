@@ -1,0 +1,5 @@
+{
+    "email": "test@email.com",
+    "username": "active_user",
+    "movies_list": [["https://www.kinopoisk.ru/film/435/", "The Green Mile"], ["https://www.kinopoisk.ru/film/326/", "The Shawshank Redemption"], ["https://www.kinopoisk.ru/film/329/", "Schindler's List"]]
+}
