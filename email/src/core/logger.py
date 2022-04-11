@@ -6,7 +6,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': LOG_FORMAT
+            'format': LOG_FORMAT,
         },
     },
     'handlers': {

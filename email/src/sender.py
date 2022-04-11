@@ -15,18 +15,16 @@ def send_mail(recepient: str, template_path: str, msg_data: dict, subject=None) 
 
     sender = config.EMAIL_USER
     password = config.EMAIL_PWD
-    smtpStr = config.EMAIL_SERVER
-    smtpPort = config.EMAIL_PORT
 
-    smtp_serv = smtplib.SMTP(smtpStr, smtpPort)
+    smtp_serv = smtplib.SMTP(config.EMAIL_SERVER, config.EMAIL_PORT)
     smtp_serv.login(sender, password)
 
     message = EmailMessage()
-    message["From"] = sender
-    message["To"] = ",".join([recepient])
-    message["Subject"] = subject
+    message['From'] = sender
+    message['To'] = ",".join([recepient])
+    message['Subject'] = subject
 
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template(template_path)
     output = template.render(**msg_data)
 
