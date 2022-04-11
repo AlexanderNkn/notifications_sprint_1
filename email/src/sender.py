@@ -21,7 +21,7 @@ def send_mail(recepient: str, template_path: str, msg_data: dict, subject=None) 
 
     message = EmailMessage()
     message['From'] = sender
-    message['To'] = ",".join([recepient])
+    message['To'] = ','.join([recepient])
     message['Subject'] = subject
 
     env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
