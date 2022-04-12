@@ -67,10 +67,13 @@ def send_data_to_queue(event: str, data_for_notification: Generator[dict, None, 
     """Sends prepared data to rabbitmq queue."""
     connection = get_producer()
     channel = connection.channel()
-    channel.queue_declare(queue=QUEUE[event], durable=True)
 
     for message_data in data_for_notification:
-        channel.basic_publish(exchange='', routing_key=QUEUE[event], body=json.dumps(message_data))
+        channel.basic_publish(
+            exchange=QUEUE[event]['exchange'],
+            routing_key=QUEUE[event]['routing_key'],
+            body=json.dumps(message_data)
+        )
     connection.close()
 
 

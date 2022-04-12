@@ -17,16 +17,19 @@ KAFKA_TOPICS = {
     },
 }
 
-EMAIL_TEMPLATES = {
-    'send_greeting': 'send_greeting.html',
-    'send_reminder': 'send_reminder.html',
-    'send_statistic': 'send_statistic.html',
-}
-
 QUEUE = {
-    'send_greeting': 'urgent_queue',
-    'send_reminder': 'common_queue',
-    'send_statistic': 'common_queue',
+    'send_greeting': {
+        'exchange': 'test-exchange',
+        'routing_key': '_user-reporting.v1.registered_',
+    },    
+    'send_reminder': {
+        'exchange': 'test-exchange',
+        'routing_key': '_admin-panel.v1.active-users_',
+    },
+    'send_statistic': {
+        'exchange': 'test-exchange',
+        'routing_key': '_admin-panel.v1.monthly_statistic_',
+    },
 }
 
 KAFKA_HOST = os.getenv('KAFKA_HOST', '127.0.0.1')
