@@ -209,6 +209,19 @@ services:
       - ./rabbit/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
       - ./rabbit/config/definitions.json:/etc/rabbitmq/definitions.json:ro
 
+  notifications:
+    container_name: notifications
+    image: notifications:v1.0
+    build:
+      context: .
+      dockerfile: notifications/docker/Dockerfile
+    env_file:
+      - notifications/envs/.notifications.env
+    depends_on:
+      - rabbit
+      - broker
+      - control-center
+
 volumes:
   zookeeper_kafka_data:
   zookeeper_kafka_log:
