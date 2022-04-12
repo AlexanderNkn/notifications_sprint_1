@@ -5,7 +5,7 @@ from typing import Generator
 
 
 def get_handler(event: str) -> Callable[..., Generator[dict, None, None]] | None:
-    """Mapping event with its method to fetch data for current event."""
+    """Mapps event with its method to fetch data for current event."""
     return {
         'send_greeting': get_data_for_greeting_letter,
         'send_reminder': get_data_for_weekly_reminder,

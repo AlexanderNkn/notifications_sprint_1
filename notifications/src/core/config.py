@@ -21,7 +21,7 @@ QUEUE = {
     'send_greeting': {
         'exchange': 'test-exchange',
         'routing_key': '_user-reporting.v1.registered_',
-    },    
+    },
     'send_reminder': {
         'exchange': 'test-exchange',
         'routing_key': '_admin-panel.v1.active-users_',
