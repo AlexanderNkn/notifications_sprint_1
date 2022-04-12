@@ -1,9 +1,5 @@
-"""Mapping events with their methods."""
-from notifications.utils import (
-    get_data_for_greeting_letter,
-    get_data_for_monthly_statistics,
-    get_data_for_weekly_reminder,
-)
+import os
+
 
 KAFKA_TOPICS = {
     'registration': {
@@ -17,12 +13,6 @@ KAFKA_TOPICS = {
     },
 }
 
-EVENT_HANDLERS = {
-    'send_greeting': get_data_for_greeting_letter,
-    'send_reminder': get_data_for_weekly_reminder,
-    'send_statistic': get_data_for_monthly_statistics,
-}
-
 EMAIL_TEMPLATES = {
     'send_greeting': 'send_greeting.html',
     'send_reminder': 'send_reminder.html',
@@ -34,3 +24,13 @@ QUEUE = {
     'send_reminder': 'common_queue',
     'send_statistic': 'common_queue',
 }
+
+KAFKA_HOST = os.getenv('KAFKA_HOST', '127.0.0.1')
+KAFKA_PORT = int(os.getenv('KAFKA_PORT', 9092))
+KAFKA_URL = f'{KAFKA_HOST}:{KAFKA_PORT}'
+
+RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', '127.0.0.1')
+RABBITMQ_PORT = int(os.getenv('RABBITMQ_PORT', 5672))
+RABBITMQ_USER = os.getenv('RABBITMQ_USER', 'guest')
+RABBITMQ_PWD = os.getenv('RABBITMQ_PWD', 'guest')
+RABBITMQ_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PWD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}'
