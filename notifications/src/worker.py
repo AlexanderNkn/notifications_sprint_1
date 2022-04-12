@@ -8,12 +8,13 @@ import json
 import logging
 from multiprocessing import Process
 from time import sleep
+from typing import Generator
 
-import backoff
+import backoff  # type: ignore
 import pika  # type: ignore
-import kafka
+import kafka  # type: ignore
 from kafka import KafkaConsumer  # type: ignore
-from notifications.src.core.config import EMAIL_TEMPLATES, KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
+from notifications.src.core.config import KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
 from notifications.src.core.handlers import get_handler
 
 logger = logging.getLogger('notifications')
@@ -48,27 +49,28 @@ def process_event(topic: str) -> None:
         logger.info(f'Collecting data for {event} event')
         if data_for_notification := get_notification_data(event, **message.value):
             logger.info(f'Data for {event} event successfully collected')
+
             logger.info(f'Sending data for {event} event to RabbitMQ queue')
             send_data_to_queue(event, data_for_notification)
             logger.info(f'Data for {event} event successfully sent to RabbitMQ queue')
         consumer.commit()
 
 
-def get_notification_data(event: str, **kwargs) -> dict | None:
+def get_notification_data(event: str, **kwargs) -> Generator[dict, None, None] | None:
     """Collects data related to specific event from related services."""
     if handler := get_handler(event):
         return handler(**kwargs)
     return None
 
 
-def send_data_to_queue(event: str, data) -> None:
+def send_data_to_queue(event: str, data_for_notification: Generator[dict, None, None]) -> None:
     """Sends prepared data to rabbitmq queue."""
     connection = get_producer()
     channel = connection.channel()
     channel.queue_declare(queue=QUEUE[event], durable=True)
 
-    data.update({'template': EMAIL_TEMPLATES[event]})
-    channel.basic_publish(exchange='', routing_key=QUEUE[event], body=json.dumps(data))
+    for message_data in data_for_notification:
+        channel.basic_publish(exchange='', routing_key=QUEUE[event], body=json.dumps(message_data))
     connection.close()
 
 
