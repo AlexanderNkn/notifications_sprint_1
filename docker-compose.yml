@@ -235,6 +235,7 @@ services:
       MH_AUTH_FILE: /home/mailhog/mailhog-auth
     volumes:
       - ./email/envs/mailhog-auth:/home/mailhog/mailhog-auth:ro
+
   email_notification:
     container_name: email_notification
     image: email_notification:v1.0

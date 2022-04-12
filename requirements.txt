@@ -1,1 +1,2 @@
 -r notifications/requirements.txt
+-r email/requirements.txt
