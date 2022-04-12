@@ -5,25 +5,21 @@ The script manages consuming events from event bus, gathering related data and t
 data to rabbitmq queue for further sending notifications to users.
 """
 import json
+import logging
 from multiprocessing import Process
+from time import sleep
 
+import backoff
 import pika  # type: ignore
+import kafka
 from kafka import KafkaConsumer  # type: ignore
 from notifications.src.core.config import EMAIL_TEMPLATES, KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
 from notifications.src.core.handlers import get_handler
 
-
-def process_event(topic: str) -> None:
-    """Manages consuming data from event bus and related services then sending to rabbitmq queue."""
-    consumer: KafkaConsumer = get_consumer(topic)
-    
-    for message in consumer:
-        event = message.value.pop('event')
-        if data_for_notification := get_notification_data(event, **message.value):
-            send_data_to_queue(event, data_for_notification)
-        consumer.commit()
+logger = logging.getLogger('notifications')
 
 
+@backoff.on_exception(backoff.expo, kafka.errors.KafkaError, max_time=120)
 def get_consumer(topic: str) -> KafkaConsumer:
     return KafkaConsumer(
         topic,
@@ -32,6 +28,30 @@ def get_consumer(topic: str) -> KafkaConsumer:
         group_id=KAFKA_TOPICS[topic]['group_id'],
         value_deserializer=lambda msg: json.loads(msg.decode('ascii')),
     )
+
+
+@backoff.on_exception(backoff.expo, pika.exceptions.AMQPConnectionError, max_time=120)
+def get_producer() -> pika.BlockingConnection:
+    params = pika.URLParameters(url=RABBITMQ_URL)
+    params.socket_timeout = 5
+    return pika.BlockingConnection(params)
+
+
+def process_event(topic: str) -> None:
+    """Manages consuming data from event bus and related services then sending to rabbitmq queue."""
+    logger.info(f'Connecting to {topic} topic in Kafka')
+    consumer: KafkaConsumer = get_consumer(topic)
+    logger.info(f'Connected successfully to {topic} topic in Kafka')
+    
+    for message in consumer:
+        event = message.value.pop('event')
+        logger.info(f'Collecting data for {event} event')
+        if data_for_notification := get_notification_data(event, **message.value):
+            logger.info(f'Data for {event} event successfully collected')
+            logger.info(f'Sending data for {event} event to RabbitMQ queue')
+            send_data_to_queue(event, data_for_notification)
+            logger.info(f'Data for {event} event successfully sent to RabbitMQ queue')
+        consumer.commit()
 
 
 def get_notification_data(event: str, **kwargs) -> dict | None:
@@ -43,10 +63,7 @@ def get_notification_data(event: str, **kwargs) -> dict | None:
 
 def send_data_to_queue(event: str, data) -> None:
     """Sends prepared data to rabbitmq queue."""
-    params = pika.URLParameters(url=RABBITMQ_URL)
-    params.socket_timeout = 5
-
-    connection = pika.BlockingConnection(params)
+    connection = get_producer()
     channel = connection.channel()
     channel.queue_declare(queue=QUEUE[event], durable=True)
 
@@ -56,6 +73,11 @@ def send_data_to_queue(event: str, data) -> None:
 
 
 if __name__ == '__main__':
-    for topic in KAFKA_TOPICS:
-        process = Process(target=process_event, args=(topic,))
-        process.start()
+    while True:
+        try:
+            for topic in KAFKA_TOPICS:
+                process = Process(target=process_event, args=(topic,))
+                process.start()
+        except Exception as exc:
+            logger.exception('Something went wrong')
+        sleep(5 * 60)

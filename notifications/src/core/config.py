@@ -1,5 +1,9 @@
 import os
+from logging import config as logging_config
 
+from notifications.src.core.logger import LOGGING
+
+logging_config.dictConfig(LOGGING)
 
 KAFKA_TOPICS = {
     'registration': {
