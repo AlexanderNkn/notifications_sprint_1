@@ -222,6 +222,31 @@ services:
       - broker
       - control-center
 
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    expose:
+      - "1025"
+      - "8025"
+    environment:
+      MH_AUTH_FILE: /home/mailhog/mailhog-auth
+    volumes:
+      - ./email/envs/mailhog-auth:/home/mailhog/mailhog-auth:ro
+  email_notification:
+    container_name: email_notification
+    image: email_notification:v1.0
+    build:
+      context: .
+      dockerfile: email/docker/Dockerfile
+    env_file:
+      - email/envs/.email.env
+    depends_on:
+      - rabbit
+      - mailhog
+
 volumes:
   zookeeper_kafka_data:
   zookeeper_kafka_log:

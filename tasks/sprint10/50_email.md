@@ -10,7 +10,7 @@
     "key": "value"
 }
 2. Подготовить шаблоны для 3 видов рассылок из задач 41-43. Шаблоны сохранить в /templates внутри сервиса. Написать метод для отправки почты на основе данных полученных в п.1 и шаблонов.
-Для подстановки данных в шаблоны используем [Jinjia2](https://pypi.org/project/Jinja2/)
+Для подстановки данных в шаблоны используем [Jinja2](https://pypi.org/project/Jinja2/)
 Отправка почты осуществляется с помощью библиотеки [smtplib](https://docs.python.org/3/library/smtplib.html), письмо перед отправкой поместить в контейнер [email](https://docs.python.org/3.9/library/email.html). Пример есть в теории яндекс.практикум
 3. Для проверки отправки почты используем [MailHog](https://github.com/mailhog/MailHog) через docker-compose.
 
