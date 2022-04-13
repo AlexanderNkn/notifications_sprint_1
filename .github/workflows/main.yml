@@ -29,7 +29,7 @@ jobs:
         uses: wemake-services/wemake-python-styleguide@0.16.1
 
       - name: Lint with mypy for python ${{ matrix.python-version }} version
-        run: mypy email notifications
+        run: mypy email notifications scheduler
 
   notification:
     runs-on: ubuntu-latest

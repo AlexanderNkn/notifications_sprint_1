@@ -4,9 +4,9 @@ import json
 import logging
 import time
 
-import backoff
-import kafka
-import schedule
+import backoff  # type: ignore
+import kafka  # type: ignore
+import schedule  # type: ignore
 from kafka import KafkaProducer
 
 from scheduler.src.config import KAFKA_URL

@@ -6,7 +6,7 @@ The script to run jobs periodically.
 import logging
 from time import sleep
 
-import schedule
+import schedule  # type: ignore
 
 from scheduler.src.jobs import send_monthly_statistic, send_weekly_reminder, test_sending_events
 
@@ -15,7 +15,7 @@ schedule_logger = logging.getLogger('schedule')
 schedule_logger.setLevel(level=logging.DEBUG)
 
 schedule.every().friday.do(send_weekly_reminder)
-#TODO for monthly events every(4).weeks should be replaced with next_run() with calculated datetime
+# TODO for monthly events every(4).weeks should be replaced with next_run() with calculated datetime
 # because of month is not equal 4 weeks.
 schedule.every(4).weeks.do(send_monthly_statistic)
 # next job runs once with each restart of scheduler container for testing purpose
