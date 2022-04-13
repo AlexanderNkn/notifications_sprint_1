@@ -1,2 +1,3 @@
 -r notifications/requirements.txt
 -r email/requirements.txt
+-r scheduler/requirements.txt

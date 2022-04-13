@@ -34,6 +34,7 @@ https://github.com/AlexanderNkn/notifications_sprint_1
     mv notifications/envs/.notifications.env.sample notifications/envs/.notifications.env
     mv email/envs/.email.env.sample email/envs/.email.env
     mv email/envs/mailhog-auth.sample email/envs/mailhog-auth
+    mv scheduler/envs/scheduler.env.sample scheduler/envs/scheduler.env
     ```
 - соберите образ
     ```
@@ -45,16 +46,27 @@ https://github.com/AlexanderNkn/notifications_sprint_1
     ```
 
 ## Использование
-- В данном спринте не подключены сервисы, через которые можно вручную выслать события в общюю шину событий (например регистрация пользователя в auth). Добавлен сервис Sheduler, но он отправляет события в автоматическом режиме.
-- Дождитесь отправки указания на генерацию и рассылку месячной статистики пользователя по просмотренным филмам.
-- Перейдите в браузере на страницу RabbitMQ
+- В данном спринте не подключены сервисы, через которые можно вручную выслать события в общую шину событий (например регистрация пользователя в auth). Добавлен сервис Sheduler, но он отправляет события в автоматическом режиме.
+- Для тестирования, в scheduler создан метод, который высылает все события при перезапуске контейнера.
+    ```
+    docker-compose restart scheduler
+    ```
+![scheduler_logs](docs/screenshots/scheduler_logs.png)
+
+- События поступают в Kafka
+![kafka_stream](docs/screenshots/kafka_stream.png)
+
+- Затем из Kafka после обрабоки в очередь RabbitMQ. Для просмотра перейдите в браузере на страницу RabbitMQ
     ```
     http://localhost:15672/#/queues/%2F/_emails.send-monthly-statistic_
     ```
+- Поступление данных в очередь
+![rabbit_weekly](docs/screenshots/rabbit_weekly.png)
+
 - Пример ответа с данными для письма
 ![mail_queue](docs/screenshots/mail_queue.png)
 
-- Для просмотра отправленных писем перейдите на страницу (логин:пароль = test:test ) 
+- Для просмотра отправленных писем перейдите на страницу Mailhog (логин:пароль = test:test ) 
     ```
     http://localhost:8025/
     ```
