@@ -11,11 +11,11 @@ then
     echo "Kafka started"
 fi
 
-if [ "$RABBIT_SERVICE" = "rabbit" ]
+if [ "$RABBITMQ_SERVICE" = "rabbit" ]
 then
     echo "Waiting for RabbitMQ ..."
 
-    while ! nc -z $RABBIT_HOST $RABBIT_PORT; do
+    while ! nc -z $RABBITMQ_HOST $RABBITMQ_PORT; do
       sleep 10
     done
 

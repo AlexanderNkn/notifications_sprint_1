@@ -6,7 +6,6 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /usr/src/code
 
 COPY ["email/requirements.txt", "email/docker/rabbit_mailhog_waiter.sh", "./"]
-# COPY ["email/requirements.txt", "email/docker/rabbit_mailhog_waiter.sh", "/tmp/"]
 
 RUN apt update && apt install -y netcat \
     && pip install --no-cache-dir -r requirements.txt \
