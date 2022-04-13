@@ -248,6 +248,18 @@ services:
       - rabbit
       - mailhog
 
+  scheduler:
+    container_name: scheduler
+    image: scheduler:v1.0
+    build:
+      context: .
+      dockerfile: scheduler/docker/Dockerfile
+    env_file:
+      - scheduler/envs/.scheduler.env
+    depends_on:
+      - broker
+      - control-center
+
 volumes:
   zookeeper_kafka_data:
   zookeeper_kafka_log:
