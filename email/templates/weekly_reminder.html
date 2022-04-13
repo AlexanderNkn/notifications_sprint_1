@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <title>*|MC:SUBJECT|*</title>
+</head>
+<body>
+<center>
+  <h1 class="mc-toc-title" style="text-align: center;">Привет, {{ username }}!</h1>
+  <div style="text-align: center;">Скоро выходные, а значит есть время для хорошего кино. Мы подобрали для тебя несколько новинок:</div>
+  <ul>
+	{% for movie_url, movie_name in movies_list %}
+		<li>
+		<a href="{{ movie_url }}" style="color:#4674ca;font-weight:500;text-decoration:none" data-link-id="6" target="_blank"> {{ movie_name }}</a>
+		</li>
+	{% endfor %}
+	</ul>
+</center>
+</body>
+</html>

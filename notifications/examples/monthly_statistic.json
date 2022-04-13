@@ -1,0 +1,9 @@
+{
+    "montly_statistic": [
+        {
+            "email": "test@email.com",
+            "username": "active_user",
+            "genres_list": [["Fantasy", 8], ["Comedy", 3], ["Documentary", 1]]
+        }
+    ]
+}

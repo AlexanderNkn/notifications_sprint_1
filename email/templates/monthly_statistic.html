@@ -1,0 +1,19 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <title>*|MC:SUBJECT|*</title>
+</head>
+<body>
+<center>
+  <h1 class="mc-toc-title" style="text-align: center;">Привет, {{ username }}!</h1>
+  <div style="text-align: center;">Это был плодотворный месяц. Вот какие жанры ты предпочел:</div>
+  <ul>
+	{% for genre, movie_count in genres_list %}
+		<li><div>{{ genre }} : {{ movie_count }}</div></li>
+	{% endfor %}
+	</ul>
+</center>
+</body>
+</html>
