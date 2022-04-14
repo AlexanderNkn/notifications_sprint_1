@@ -8,8 +8,8 @@ logger = logging.getLogger('email_notification')
 
 
 class SMTPLibSender(AbstractEmailSender):
-    def __init__(self, *args, **kwargs):
-        super(SMTPLibSender, self).__init__(*args, **kwargs)
+    def __init__(self):
+        super(SMTPLibSender, self).__init__()
         self.smtp_serv = None
 
     def connect(self, server: str, port: int, user: str, pwd: str, ssl: bool, *args, **kwargs):
