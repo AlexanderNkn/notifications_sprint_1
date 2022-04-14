@@ -1,7 +1,7 @@
 import json
 import logging
 
-import pika  # type: ignore
+import pika
 
 from core import config
 from sender import send_mail

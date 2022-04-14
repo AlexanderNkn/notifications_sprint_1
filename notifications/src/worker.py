@@ -10,13 +10,13 @@ from multiprocessing import Process
 from time import sleep
 from typing import Generator
 
-import backoff  # type: ignore
-import kafka  # type: ignore
-import pika  # type: ignore
-from kafka import KafkaConsumer  # type: ignore
+import backoff
+import kafka
+import pika
+from kafka import KafkaConsumer
 
-from notifications.src.core.config import KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
-from notifications.src.core.handlers import get_handler
+from core.config import KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
+from core.handlers import get_handler
 
 logger = logging.getLogger('notifications')
 

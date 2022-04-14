@@ -6,9 +6,9 @@ The script to run jobs periodically.
 import logging
 from time import sleep
 
-import schedule  # type: ignore
+import schedule
 
-from scheduler.src.jobs import send_monthly_statistic, send_weekly_reminder, test_sending_events
+from jobs import send_monthly_statistic, send_weekly_reminder, test_sending_events
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 schedule_logger = logging.getLogger('schedule')

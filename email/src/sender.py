@@ -2,7 +2,7 @@ import logging
 import os
 import smtplib
 from email.message import EmailMessage
-from jinja2 import Environment, FileSystemLoader  # type: ignore
+from jinja2 import Environment, FileSystemLoader
 
 from core import config
 

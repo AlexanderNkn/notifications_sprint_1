@@ -4,12 +4,12 @@ import json
 import logging
 import time
 
-import backoff  # type: ignore
-import kafka  # type: ignore
-import schedule  # type: ignore
+import backoff
+import kafka
+import schedule
 from kafka import KafkaProducer
 
-from scheduler.src.config import KAFKA_URL
+from config import KAFKA_URL
 
 schedule_logger = logging.getLogger('schedule')
 
