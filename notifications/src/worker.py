@@ -15,8 +15,8 @@ import kafka
 import pika
 from kafka import KafkaConsumer
 
-from core.config import KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
-from core.handlers import get_handler
+from notifications.src.core.config import KAFKA_TOPICS, KAFKA_URL, QUEUE, RABBITMQ_URL
+from notifications.src.core.handlers import get_handler
 
 logger = logging.getLogger('notifications')
 
