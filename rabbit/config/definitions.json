@@ -55,6 +55,15 @@
             "arguments": {
                 "x-queue-type": "classic"
             }
+        },
+        {
+            "name": "_sms.send-monthly-statistic_",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
         }
     ],
     "exchanges": [{
@@ -88,6 +97,15 @@
             "destination_type": "queue",
             "routing_key": "_user-reporting.v1.registered_",
             "arguments": {}
+        },
+        {
+            "source": "test-exchange",
+            "vhost": "/",
+            "destination": "_sms.send-monthly-statistic_",
+            "destination_type": "queue",
+            "routing_key": "_sms.monthly-statistic_",
+            "arguments": {}
         }
+        
     ]
 }
