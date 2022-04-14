@@ -2,7 +2,6 @@
 
 import json
 import logging
-import time
 
 import backoff
 import kafka
@@ -27,7 +26,7 @@ def send_greeting() -> None:
     schedule_logger.info('Sending registration event')
     producer.send('registration', {'event': 'send_greeting'})
     schedule_logger.info('Registration event successfully sent')
-    time.sleep(1)
+    producer.flush()
     producer.close()
 
 
@@ -36,7 +35,7 @@ def send_weekly_reminder() -> None:
     schedule_logger.info('Sending weekly_reminder event')
     producer.send('weekly_reminder', {'event': 'send_reminder'})
     schedule_logger.info('Weekly_reminder event successfully sent')
-    time.sleep(1)
+    producer.flush()
     producer.close()
 
 
@@ -45,7 +44,7 @@ def send_monthly_statistic() -> None:
     schedule_logger.info('Sending monthly_statistic event')
     producer.send('monthly_statistic', {'event': 'send_statistic'})
     schedule_logger.info('Monthly_statistic event successfully sent')
-    time.sleep(1)
+    producer.flush()
     producer.close()
 
 
