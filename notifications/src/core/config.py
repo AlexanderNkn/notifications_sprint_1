@@ -1,7 +1,7 @@
 import os
 from logging import config as logging_config
 
-from notifications.src.core.logger import LOGGING
+from .logger import LOGGING
 
 logging_config.dictConfig(LOGGING)
 
@@ -29,6 +29,11 @@ QUEUE = {
     'send_statistic': {
         'exchange': 'test-exchange',
         'routing_key': '_admin-panel.v1.monthly_statistic_',
+    },
+    # TODO add sms notifications
+    'send_statistic_sms': {
+        'exchange': 'test-exchange',
+        'routing_key': '_sms.monthly_statistic_',
     },
 }
 
