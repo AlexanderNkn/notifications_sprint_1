@@ -16,5 +16,7 @@ EMAIL_USER = os.getenv('EMAIL_USER', '')
 EMAIL_PWD = os.getenv('EMAIL_PWD', '')
 EMAIL_SERVER = os.getenv('EMAIL_SERVER', '')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '465'))
+email_ssl = os.getenv('EMAIL_SSL')
+EMAIL_SSL = (email_ssl and email_ssl.lower() == 'true')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
