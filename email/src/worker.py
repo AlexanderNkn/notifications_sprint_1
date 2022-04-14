@@ -4,15 +4,17 @@ import logging
 import pika  # type: ignore
 
 from core import config
-from sender import send_mail
+from sender.message_render import get_message
+from sender.smtplib_sender import SMTPLibSender
 
 logger = logging.getLogger('email_notification')
 
 
 def send_mail_with_template(channel, method_frame, header_frame, body, subject, template_path):
     msg_body = json.loads(body)
-    recepient = msg_body.get('email')
-    send_mail(recepient, template_path, msg_body, subject)
+    recipient = msg_body.get('email')
+    message = get_message(template_path, msg_body)
+    sender.send([recipient], message, config.EMAIL_USER, subject)
     channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
 
@@ -38,11 +40,14 @@ channel.basic_consume('_emails.send-welcome_', send_welcome_mail)
 channel.basic_consume('_emails.send-weekly-reminder_', send_weekly_reminder_mail)
 channel.basic_consume('_emails.send-monthly-statistic_', send_monthly_statistic_mail)
 
+sender = SMTPLibSender()
 
 if __name__ == '__main__':
+    sender.connect(config.EMAIL_SERVER, config.EMAIL_PORT, config.EMAIL_USER, config.EMAIL_PWD, config.EMAIL_SSL)
     try:
         channel.start_consuming()
     except KeyboardInterrupt:
         channel.stop_consuming()
 
     connection.close()
+    sender.disconnect()

@@ -56,3 +56,5 @@ doc.html
 
 # mypy
 .mypy_cache
+
+docker-compose.override.yml
