@@ -4,8 +4,8 @@ import logging
 import pika  # type: ignore
 
 from core import config
-from sender.message_render import get_message
-from sender.smtplib_sender import SMTPLibSender
+from senders.message_render import get_message  # type: ignore
+from senders.smtplib_sender import SMTPLibSender  # type: ignore
 
 logger = logging.getLogger('email_notification')
 

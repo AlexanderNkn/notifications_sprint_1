@@ -2,7 +2,7 @@ import logging
 import smtplib
 from email.message import EmailMessage
 
-from sender.abstract_sender import AbstractEmailSender
+from senders.abstract_sender import AbstractEmailSender  # type: ignore
 
 logger = logging.getLogger('email_notification')
 
