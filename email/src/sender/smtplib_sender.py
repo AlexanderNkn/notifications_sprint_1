@@ -1,7 +1,6 @@
 import logging
 import smtplib
 from email.message import EmailMessage
-from jinja2 import Environment, FileSystemLoader  # type: ignore
 
 from sender.abstract_sender import AbstractEmailSender
 
@@ -9,8 +8,8 @@ logger = logging.getLogger('email_notification')
 
 
 class SMTPLibSender(AbstractEmailSender):
-    def __init__(self):
-        super(SMTPLibSender, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(SMTPLibSender, self).__init__(*args, **kwargs)
         self.smtp_serv = None
 
     def connect(self, server: str, port: int, user: str, pwd: str, ssl: bool, *args, **kwargs):
@@ -22,7 +21,7 @@ class SMTPLibSender(AbstractEmailSender):
 
     def send(self, recipients: list[str], message: str, sender: str = None, subject: str = None, *args, **kwargs):
         if not self.smtp_serv:
-            raise Exception('Server is not connected')
+            raise AssertionError('Server is not connected')
 
         email_message = EmailMessage()
         email_message['From'] = sender
